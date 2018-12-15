@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "MININIX-auth.h"
+#include "mininix-auth.h"
 
 // PoC of 'password login'
 

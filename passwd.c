@@ -23,7 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "MININIX-auth.h"
+#include "mininix-auth.h"
 
 static void erase_ptr(void *ptr, unsigned int len) {
     volatile char *p = ptr;
