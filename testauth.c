@@ -1,5 +1,5 @@
 //
-// Password authentication utilities for Termux
+// Password authentication utilities for MININIX
 // Copyright (C) 2018 Leonid Plyushch <leonid.plyushch@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "termux-auth.h"
+#include "MININIX-auth.h"
 
 // PoC of 'password login'
 
@@ -33,7 +33,7 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    if (termux_auth("termux", password)) {
+    if (mininix_auth("MININIX", password)) {
         puts("Password is OK");
     } else {
         puts("Invalid password.");

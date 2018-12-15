@@ -1,5 +1,5 @@
 //
-// Password authentication utilities for Termux
+// Password authentication utilities for MININIX
 // Copyright (C) 2018 Leonid Plyushch <leonid.plyushch@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "termux-auth.h"
+#include "MININIX-auth.h"
 
 static void erase_ptr(void *ptr, unsigned int len) {
     volatile char *p = ptr;
@@ -81,7 +81,7 @@ int main(void) {
         return ret;
     }
 
-    if (termux_change_passwd(password)) {
+    if (mininix_change_passwd(password)) {
         puts("New password was successfully set.");
         ret = EXIT_SUCCESS;
     } else {

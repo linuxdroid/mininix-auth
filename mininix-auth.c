@@ -1,5 +1,5 @@
 //
-// Password authentication utilities for Termux
+// Password authentication utilities for MININIX
 // Copyright (C) 2018 Leonid Plyushch <leonid.plyushch@gmail.com>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 #include <openssl/sha.h>
 #include <openssl/evp.h>
 
-#include "termux-auth.h"
+#include "MININIX-auth.h"
 
 static void erase_ptr(void *ptr, unsigned int len) {
     volatile char *p = ptr;
@@ -42,8 +42,8 @@ static void erase_ptr(void *ptr, unsigned int len) {
 
 // Hash password using PBKDF function.
 // Returns digest (in binary form) or NULL if failed.
-unsigned char *termux_passwd_hash(const char *password) {
-    const unsigned char *salt = (const unsigned char *) "Termux!";
+unsigned char *mininix_passwd_hash(const char *password) {
+    const unsigned char *salt = (const unsigned char *) "MININIX!";
     unsigned char *pbkdf_digest;
 
     if ((pbkdf_digest = (unsigned char *) malloc(SHA_DIGEST_LENGTH * sizeof(unsigned char))) == NULL) {
@@ -61,19 +61,19 @@ unsigned char *termux_passwd_hash(const char *password) {
 
 // Update file that stores password hash
 // Return true on success, false otherwise.
-bool termux_change_passwd(const char *new_password) {
-    FILE *termux_auth_file;
+bool mininix_change_passwd(const char *new_password) {
+    FILE *mininix_auth_file;
     bool is_password_changed = false;
 
-    unsigned char *hashed_password = termux_passwd_hash(new_password);
+    unsigned char *hashed_password = mininix_passwd_hash(new_password);
     if (!hashed_password) {
         return false;
     }
 
-    if ((termux_auth_file = fopen(AUTH_HASH_FILE_PATH, "w")) != NULL) {
-        int n = fwrite(hashed_password, sizeof(unsigned char), SHA_DIGEST_LENGTH, termux_auth_file);
-        fflush(termux_auth_file);
-        fclose(termux_auth_file);
+    if ((mininix_auth_file = fopen(AUTH_HASH_FILE_PATH, "w")) != NULL) {
+        int n = fwrite(hashed_password, sizeof(unsigned char), SHA_DIGEST_LENGTH, mininix_auth_file);
+        fflush(mininix_auth_file);
+        fclose(mininix_auth_file);
 
         erase_ptr(hashed_password, n);
 
@@ -91,8 +91,8 @@ bool termux_change_passwd(const char *new_password) {
 
 // Check validity of password (user name is ignored).
 // Return true if password is ok, otherwise return false.
-bool termux_auth(const char *user, const char *password) {
-    FILE *termux_auth_file;
+bool mininix_auth(const char *user, const char *password) {
+    FILE *mininix_auth_file;
     unsigned char *auth_info;
     unsigned char *hashed_password;
     bool is_authenticated = false;
@@ -102,14 +102,14 @@ bool termux_auth(const char *user, const char *password) {
         return false;
     }
 
-    if ((hashed_password = termux_passwd_hash(password)) == NULL) {
+    if ((hashed_password = mininix_passwd_hash(password)) == NULL) {
         free(auth_info);
         return false;
     }
 
-    if ((termux_auth_file = fopen(AUTH_HASH_FILE_PATH, "rb")) != NULL) {
-        int n = fread(auth_info, sizeof(unsigned char), SHA_DIGEST_LENGTH, termux_auth_file);
-        fclose(termux_auth_file);
+    if ((mininix_auth_file = fopen(AUTH_HASH_FILE_PATH, "rb")) != NULL) {
+        int n = fread(auth_info, sizeof(unsigned char), SHA_DIGEST_LENGTH, mininix_auth_file);
+        fclose(mininix_auth_file);
 
         if (n == SHA_DIGEST_LENGTH) {
             if (memcmp(auth_info, hashed_password, SHA_DIGEST_LENGTH) == 0) {
